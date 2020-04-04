@@ -1,0 +1,21 @@
+{
+    "name": "romanato/php-flashingo-messages",
+    "description": "Session based flash messages for PHP.",
+    "keywords": ["flash", "session", "messages"],
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Roman",
+            "email": "romikor1999@gmail.com"
+        }
+    ],
+    "require": {
+        "php": "^7.2"
+    },
+    "autoload": {
+        "psr-4": {
+            "Romanato\\FlashingoMessage\\": "src//"
+        }
+    }
+}
