@@ -10,16 +10,16 @@ class FlashingoMessage
         Support\HandlerTrait;
 
     /**
-     * Set available types.
+     * Set available types and their classes.
      *
      * @var array
      */
     public $types = [
-        'default',
-        'error',
-        'warning',
-        'info',
-        'success'
+        'default' => 'alert-primary',
+        'error' => 'alert-error',
+        'warning' => 'alert-warning',
+        'info' => 'alert-info',
+        'success' => 'alert-success'
     ];
 
     /**
@@ -52,7 +52,7 @@ class FlashingoMessage
      *
      * @param string $message
      * @param string $type
-     * @param string|array $options
+     * @param array $options
      */
     public function set($message, $type = 'default', $options = [])
     {
@@ -64,7 +64,7 @@ class FlashingoMessage
      * Set a default flash message.
      *
      * @param string $message
-     * @param string|array $options
+     * @param array $options
      */
     public function setDefault($message, $options = [])
     {
@@ -76,7 +76,7 @@ class FlashingoMessage
      * Set an error flash message.
      *
      * @param string $message
-     * @param string|array $options
+     * @param array $options
      */
     public function setError($message, $options = [])
     {
@@ -88,9 +88,33 @@ class FlashingoMessage
      * Set a warning flash message.
      *
      * @param string $message
-     * @param string|array $options
+     * @param array $options
      */
     public function setWarning($message, $options = [])
+    {
+        // Add to session
+        $this->add($message, 'warning', $options);
+    }
+
+    /**
+     * Set a info flash message.
+     *
+     * @param string $message
+     * @param array $options
+     */
+    public function setInfo($message, $options = [])
+    {
+        // Add to session
+        $this->add($message, 'warning', $options);
+    }
+
+    /**
+     * Set a success flash message.
+     *
+     * @param string $message
+     * @param array $options
+     */
+    public function setSuccess($message, $options = [])
     {
         // Add to session
         $this->add($message, 'warning', $options);
