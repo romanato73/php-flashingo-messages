@@ -6,8 +6,7 @@ namespace Romanato\FlashingoMessage;
 class FlashingoMessage
 {
 
-    use Support\ExceptionTrait,
-        Support\HandlerTrait;
+    use Support\HandlerTrait;
 
     /**
      * Set available types and their classes.
@@ -28,8 +27,7 @@ class FlashingoMessage
      * @var array
      */
     public $options = [
-        'name',
-        'class',
+        'name', 'class',
     ];
 
     /**
@@ -127,7 +125,6 @@ class FlashingoMessage
      */
     public function display($name)
     {
-        // Display all flash messages
         $this->displayOneFlashingo($name);
     }
 
@@ -136,7 +133,19 @@ class FlashingoMessage
      */
     public function displayAll()
     {
-        // Display all flash messages
         $this->displayAllFlashingos();
     }
+
+    /**
+     * Clear session.
+     */
+    public function destroyAll()
+    {
+        $this->clearAllFlashingos();
+    }
+
+    /**
+     * TODO: hasError, hasWarning, hasInfo, hasSuccess
+     * TODO: displayError, displayWarning, displayInfo, displaySuccess
+     */
 }

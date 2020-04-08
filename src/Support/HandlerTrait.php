@@ -4,14 +4,12 @@
 namespace Romanato\FlashingoMessage\Support;
 
 
-use Exception;
-
 trait HandlerTrait
 {
     /**
      * Initialize Flashingo Messages handler.
      */
-    private function initializeFlashingoMessages()
+    protected function initializeFlashingoMessages()
     {
         try {
             // Create a session array to hold flashingo messages
@@ -21,7 +19,7 @@ trait HandlerTrait
                 throw new Exception('Can not initialize session.');
             }
         } catch (Exception $exception) {
-            $this->sessionNotSet($exception->getMessage());
+            die($exception->sessionNotSet());
         }
     }
 
@@ -32,7 +30,7 @@ trait HandlerTrait
      * @param string $type
      * @param string|array $options
      */
-    private function add($message, $type, $options)
+    protected function add($message, $type, $options)
     {
         // Create id for item
         $itemId = uniqid();
@@ -42,6 +40,7 @@ trait HandlerTrait
             $options = [];
         }
 
+        // Set custom name if defined
         if (in_array('name', array_keys($options))) {
             $itemId = $options['name'];
         }
@@ -51,6 +50,7 @@ trait HandlerTrait
         // Check if options exists in available options
         $this->checkOptions($options);
 
+        // Create item array
         $item = [
             'type' => $type,
             'message' => $message,
@@ -66,14 +66,14 @@ trait HandlerTrait
      *
      * @param string $type
      */
-    private function checkType($type)
+    protected function checkType($type)
     {
         try {
             if (!in_array($type, array_keys($this->types))) {
                 throw new Exception("Type ${type} is not defined.");
             }
         } catch (Exception $exception) {
-            $this->unknownType($exception->getMessage());
+            die($exception->unknownType());
         }
     }
 
@@ -82,27 +82,30 @@ trait HandlerTrait
      *
      * @param array $options
      */
-    private function checkOptions($options)
+    protected function checkOptions($options)
     {
         try {
-            foreach ($options as $option => $value) {
+            foreach (array_keys($options) as $option) {
                 if (!in_array($option, $this->options)) {
                     throw new Exception("Option ${option} is not defined.");
                 }
             }
         } catch (Exception $exception) {
-            $this->unknownType($exception->getMessage());
+            die($exception->unknownType());
         }
     }
 
     /**
      * Display all flash messages handler.
      */
-    private function displayAllFlashingos()
+    protected function displayAllFlashingos()
     {
+        // Loop through all flash messages in session
         foreach ($_SESSION['flashingo'] as $id => $item) {
             if (!empty($item)) {
+                // Show all flash messages
                 $this->show($item);
+                // Clear session for all flash messages
                 $this->clearSession($id);
             }
         }
@@ -113,9 +116,9 @@ trait HandlerTrait
      *
      * @param array $item
      */
-    private function show($item)
+    protected function show($item)
     {
-        foreach ($this->types as $key => $value) {
+        foreach (array_keys($this->types) as $key) {
             if ($key == $item['type']) {
                 $class = $this->getClass($key);
                 if (in_array('class', array_keys($item['options']))) {
@@ -133,7 +136,7 @@ trait HandlerTrait
      * @param string $type
      * @return mixed
      */
-    private function getClass($type)
+    protected function getClass($type)
     {
         foreach ($this->types as $key => $value) {
             if ($type == $key) {
@@ -149,10 +152,10 @@ trait HandlerTrait
      *
      * @param string $id
      */
-    private function clearSession($id)
+    protected function clearSession($id)
     {
         // Check if item with id exists
-        foreach ($_SESSION['flashingo'] as $itemId => $item) {
+        foreach (array_keys($_SESSION['flashingo']) as $itemId) {
             if ($itemId == $id) {
                 unset($_SESSION['flashingo'][$itemId]);
             }
@@ -161,13 +164,19 @@ trait HandlerTrait
 
     /**
      * Display unique flash message with id handler.
+     *
+     * @param string $name
      */
-    private function displayOneFlashingo($name)
+    protected function displayOneFlashingo($name)
     {
+        // Check if that name exists
         if ($this->hasName($name)) {
+            // Set new item
             $item = $this->hasName($name);
-            $this->show($item[array_keys($item)[0]]);
-            $this->clearSession(array_keys($item)[0]);
+            // Show item
+            $this->show($item[$name]);
+            // Clear item's session
+            $this->clearSession($name);
         }
     }
 
@@ -177,7 +186,7 @@ trait HandlerTrait
      * @param string $name
      * @return bool|array
      */
-    private function hasName($name)
+    protected function hasName($name)
     {
         foreach ($_SESSION['flashingo'] as $id => $item) {
             if (in_array($name, $item['options'])) {
@@ -186,5 +195,16 @@ trait HandlerTrait
         }
 
         return false;
+    }
+
+    /**
+     * Clear session handler.
+     */
+    protected function clearAllFlashingos()
+    {
+        // Unset all items
+        unset($_SESSION['flashingo']);
+        // Initialize Flashingo Messages
+        $this->initializeFlashingoMessages();
     }
 }
