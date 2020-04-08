@@ -54,7 +54,6 @@ class FlashingoMessage
      */
     public function set($message, $type = 'default', $options = [])
     {
-        // Add to session
         $this->add($message, $type, $options);
     }
 
@@ -66,7 +65,6 @@ class FlashingoMessage
      */
     public function setDefault($message, $options = [])
     {
-        // Add to session
         $this->add($message, 'default', $options);
     }
 
@@ -78,7 +76,6 @@ class FlashingoMessage
      */
     public function setError($message, $options = [])
     {
-        // Add to session
         $this->add($message, 'error', $options);
     }
 
@@ -90,7 +87,6 @@ class FlashingoMessage
      */
     public function setWarning($message, $options = [])
     {
-        // Add to session
         $this->add($message, 'warning', $options);
     }
 
@@ -102,7 +98,6 @@ class FlashingoMessage
      */
     public function setInfo($message, $options = [])
     {
-        // Add to session
         $this->add($message, 'warning', $options);
     }
 
@@ -114,7 +109,6 @@ class FlashingoMessage
      */
     public function setSuccess($message, $options = [])
     {
-        // Add to session
         $this->add($message, 'warning', $options);
     }
 
